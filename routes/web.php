@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AttendeeController;
 use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
@@ -22,7 +24,21 @@ Route::middleware(['auth', 'role:1'])->group(function () {
         Route::group(['prefix' => 'events', 'as' => 'events.'], function () {
             Route::controller(EventController::class)->group(function () {
                 Route::get('/', 'index')->name('index');
-                Route::get('/{event}/create', 'create')->name('create');
+                Route::get('/create', 'create')->name('create');
+                Route::post('/', 'store')->name('store');
+                Route::get('/{event}/edit', 'edit')->name('edit');
+                Route::patch('/{event}/', 'update')->name('update');
+            });
+        });
+
+        Route::group(['prefix' => 'attendees', 'as' => 'attendees.'], function () {
+            Route::controller(AttendeeController::class)->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/create', 'create')->name('create');
+                Route::post('/', 'store')->name('store');
+                Route::get('/{event}/edit', 'edit')->name('edit');
+                Route::patch('/{event}/', 'update')->name('update');
+                Route::delete('/{event}/', 'destroy')->name('destroy');
             });
         });
 
@@ -44,10 +60,7 @@ Route::middleware(['auth', 'role:2'])->group(function () {
         Route::group(['prefix' => 'events', 'as' => 'events.'], function () {
             Route::controller(EventController::class)->group(function () {
                 Route::get('/', 'index')->name('index');
-                Route::get('/create', 'create')->name('create');
-                Route::post('/', 'store')->name('store');
-                Route::get('/{event}/', 'edit')->name('edit');
-                Route::patch('/{event}/', 'update')->name('update');
+                Route::get('{event}/view', 'view')->name('view');
             });
         });
 
