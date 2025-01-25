@@ -27,8 +27,7 @@
                     <a class="dropdown-item" href="{{ (currentUser()->role == 1) ? route('admin.profile.edit', userId()) : route('attendee.profile.edit', userId()) }}">Profile</a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-
-                        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">
+                        <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">
                             Log Out
                         </a>
                     </form>

@@ -28,6 +28,7 @@ Route::middleware(['auth', 'role:1'])->group(function () {
                 Route::post('/', 'store')->name('store');
                 Route::get('/{event}/edit', 'edit')->name('edit');
                 Route::patch('/{event}/', 'update')->name('update');
+                Route::delete('/{event}/', 'destroy')->name('destroy');
             });
         });
 
