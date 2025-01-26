@@ -19,6 +19,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('upazila_id')->nullable();
             $table->unsignedBigInteger('union_id')->nullable();
             $table->text('description')->nullable();
+            $table->string('image_path')->nullable();
             $table->tinyInteger('status')->comment('0: Inactive, 1: Active')->default(1);
 
             $table->timestamps();

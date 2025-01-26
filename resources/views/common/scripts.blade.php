@@ -39,7 +39,7 @@
 
     function previewImage(event) {
         const input = event.target;
-        const preview = document.getElementById('preview');
+        const preview = document.getElementById('image_preview');
 
         if (input.files && input.files[0]) {
             const reader = new FileReader();

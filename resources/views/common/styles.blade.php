@@ -145,11 +145,4 @@
         background-color: #d38312 !important;
         border-color: #d38312 !important;
     }
-
-    .form-control {
-        font-size: 18px !important;
-        border: 1px solid rgba(170, 170, 170, .3);
-        padding: .47rem 0.8rem !important;
-        color: #000 !important;
-    }
 </style>

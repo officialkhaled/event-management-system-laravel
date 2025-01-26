@@ -42,6 +42,7 @@ class EventController extends Controller
 
     public function store(Request $request)
     {
+        dd($request->all());
         $request->validate([
             'title' => 'required',
             'date' => 'required',
@@ -62,12 +63,22 @@ class EventController extends Controller
             'description' => $request->description,
         ]);
 
+        if ($request->image_path) {
+            $imageName = "images/" . time() . '.' . $request->image_path->extension();
+            $request->image_path->move(storage_path('app/public/images'), $imageName);
+            currentUser()->image = $imageName;
+
+            currentUser()->save();
+        }
+
         return redirect()->route('admin.events.index')->with('success', 'Event Created Successfully!');
     }
 
-    public function edit()
+    public function edit(Event $event)
     {
-        return view('admin.events.edit');
+        return view('admin.events.edit', [
+            'event' => $event,
+        ]);
     }
 
     public function update(Request $request)

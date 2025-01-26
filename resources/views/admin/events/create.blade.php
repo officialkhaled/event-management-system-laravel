@@ -87,15 +87,39 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="description">Description</label>
-                                        <textarea class="form-control" name="description" id="description" rows="3"></textarea>
+                                        <textarea class="form-control" name="description" id="description" rows="1" placeholder="Enter description"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="image_path">Image <small>(upload wide images only)</small></label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Upload</span>
+                                            </div>
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="image_path" onchange="previewImage(event)">
+                                                <label class="custom-file-label" for="image_path">Choose file</label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row">
+                                <div class="col-md-12 d-flex justify-content-center align-items-center">
+                                    <div class="form-group" data-container="body" data-toggle="popover" title="Event Thumbnail" data-placement="top"
+                                         data-content="">
+                                        <img style="width: 780px; aspect-ratio: 16/9; object-fit: contain; border-radius: 6px; margin-top: 30px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);"
+                                             src="{{ asset('assets/images/no_image.jpg') }}" id="image_preview" class="img-fluid" alt="Uploaded Image"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-2">
                                 <div class="col-md-12 d-flex justify-content-center" style="gap: 8px;">
                                     <button type="submit" class="btn btn-success waves-effect waves-light">
                                         &nbsp;<i class="fa-solid fa-save"></i>&nbsp;&nbsp;Submit&nbsp;

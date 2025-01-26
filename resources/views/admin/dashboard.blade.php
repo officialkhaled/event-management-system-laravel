@@ -13,7 +13,7 @@
                                     <div class="seofct-icon"><i class="fa-solid fa-mask-ventilator"></i> Events</div>
                                     <h2>45</h2>
                                 </div>
-                                <canvas id="seolinechart1" height="50"></canvas>
+                                <canvas id="seolinechart1" height="30"></canvas>
                             </div>
                         </div>
                     </div>
@@ -24,7 +24,7 @@
                                     <div class="seofct-icon"><i class="fa-solid fa-people-group"></i> Attendees</div>
                                     <h2>3,984</h2>
                                 </div>
-                                <canvas id="seolinechart2" height="50"></canvas>
+                                <canvas id="seolinechart2" height="30"></canvas>
                             </div>
                         </div>
                     </div>
@@ -32,8 +32,8 @@
                         <div class="card">
                             <div class="seo-fact sbg3">
                                 <div class="p-4 d-flex justify-content-between align-items-center">
-                                    <div class="seofct-icon">Impressions</div>
-                                    <canvas id="seolinechart3" height="60"></canvas>
+                                    <div class="seofct-icon"><i class="fa-solid fa-wand-magic-sparkles"></i> Completed Events</div>
+                                    <h2>3,984</h2>
                                 </div>
                             </div>
                         </div>
@@ -42,8 +42,8 @@
                         <div class="card">
                             <div class="seo-fact sbg4">
                                 <div class="p-4 d-flex justify-content-between align-items-center">
-                                    <div class="seofct-icon">New Users</div>
-                                    <canvas id="seolinechart4" height="60"></canvas>
+                                    <div class="seofct-icon"><i class="fa-solid fa-shield-halved"></i> On-going Events</div>
+                                    <h2>3,984</h2>
                                 </div>
                             </div>
                         </div>
