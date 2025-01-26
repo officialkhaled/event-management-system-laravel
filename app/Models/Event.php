@@ -15,13 +15,13 @@ class Event extends Model
 
     protected $fillable = [
         'title',
+        'date',
+        'from_time',
+        'to_time',
         'division_id',
         'district_id',
         'upazila_id',
         'union_id',
-        'date',
-        'from_time',
-        'to_time',
         'description',
         'status',
     ];

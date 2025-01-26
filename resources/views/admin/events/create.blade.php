@@ -15,32 +15,34 @@
                             </a>
                         </div>
 
-                        <form action="{{ route('admin.events.store') }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ route('admin.events.store') }}" method="post" id="event-form" enctype="multipart/form-data">
                             @csrf
 
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label for="title">Title</label>
+                                        <label for="title">Title <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" id="title" name="title" placeholder="Enter title">
+                                        <span class="text-danger title-validation"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label for="title">Date</label>
-                                        <input type="date" class="form-control" id="date" name="date" placeholder="Enter date">
+                                        <label for="title">Date <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" id="date" name="date" placeholder="Enter date" value="{{ date('Y-m-d') }}">
+                                        <span class="text-danger date-validation"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="from_time">From Time</label>
-                                        <input type="time" class="form-control" id="from_time" name="from_time" min="09:00" max="18:00"/>
+                                        <input type="time" class="form-control" id="from_time" name="from_time"/>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="to_time">To Time</label>
-                                        <input type="time" class="form-control" id="to_time" name="to_time" min="09:00" max="18:00"/>
+                                        <input type="time" class="form-control" id="to_time" name="to_time"/>
                                     </div>
                                 </div>
                             </div>
@@ -48,13 +50,14 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label for="division_id">Division</label>
+                                        <label for="division_id">Division <span class="text-danger">*</span></label>
                                         <select name="division_id" id="division_id" class="form-control select2">
                                             <option value="">Select</option>
                                             @foreach($divisions as $division)
                                                 <option value="{{ $division->id }}">{{ $division->name }}</option>
                                             @endforeach
                                         </select>
+                                        <span class="text-danger division-validation"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -119,10 +122,26 @@
         const upazila = $('#upazila_id');
         const union = $('#union_id');
         const date = $('#date');
+        const titleValidation = $('.title-validation');
+        const dateValidation = $('.date-validation');
+        const divisionValidation = $('.division-validation');
 
         $(document).ready(function () {
             $('.select2').select2({
-                allowClear: false,
+                allowClear: true,
+            });
+
+            $(document).on('submit', '#event-form', (event) => {
+                event.preventDefault();
+                if (titleValidation.val() == null) {
+                    $('.title-validation').text('Title is required');
+                }
+                if (dateValidation.val() == null) {
+                    $('.date-validation').text('Date is required');
+                }
+                if (divisionValidation.val() == null) {
+                    $('.division-validation').text('Division is required');
+                }
             });
 
             $(document).on('change', '#division_id', () => {

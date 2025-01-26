@@ -42,7 +42,27 @@ class EventController extends Controller
 
     public function store(Request $request)
     {
-        return view('admin.events.create');
+        $request->validate([
+            'title' => 'required',
+            'date' => 'required',
+            'division' => 'required',
+        ], [
+            'title.required' => 'Title is required',
+            'date.required' => 'Date is required',
+            'division.required' => 'Division is required',
+        ]);
+
+        Event::create([
+            'title' => $request->title,
+            'date' => $request->date,
+            'division_id' => $request->division,
+            'district_id' => $request->district,
+            'upazila_id' => $request->upazila,
+            'union_id' => $request->union,
+            'description' => $request->description,
+        ]);
+
+        return redirect()->route('admin.events.index')->with('success', 'Event Created Successfully!');
     }
 
     public function edit()

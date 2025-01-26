@@ -11,13 +11,13 @@ return new class extends Migration {
             $table->id();
 
             $table->string('title');
+            $table->date('date');
+            $table->string('from_time')->nullable();
+            $table->string('to_time')->nullable();
             $table->unsignedBigInteger('division_id');
             $table->unsignedBigInteger('district_id')->nullable();
             $table->unsignedBigInteger('upazila_id')->nullable();
             $table->unsignedBigInteger('union_id')->nullable();
-            $table->date('date');
-            $table->string('from_time')->nullable();
-            $table->string('to_time')->nullable();
             $table->text('description')->nullable();
             $table->tinyInteger('status')->comment('0: Inactive, 1: Active')->default(1);
 
