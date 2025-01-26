@@ -5,6 +5,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AttendeeController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CommonApiController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -14,6 +15,15 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::middleware('auth')->group(function () {
+    Route::group(['prefix' => 'api', 'as' => 'api.'], function () {
+        Route::controller(CommonApiController::class)->group(function () {
+            Route::get('/get-districts', 'getDistricts')->name('get-districts');
+            Route::get('/get-upazilas', 'getUpazilas')->name('get-upazilas');
+            Route::get('/get-unions', 'getUnions')->name('get-unions');
+        });
+    });
+});
 
 Route::middleware(['auth', 'role:1'])->group(function () {
     Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {

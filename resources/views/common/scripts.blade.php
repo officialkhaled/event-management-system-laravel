@@ -18,6 +18,8 @@
 <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
 <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
@@ -30,3 +32,23 @@
 <script src="{{ asset('assets/js/maps.js') }}"></script>
 <script src="{{ asset('assets/js/plugins.js') }}"></script>
 <script src="{{ asset('assets/js/scripts.js') }}"></script>
+
+<script>
+    $.fn.select2.defaults.set("theme", "bootstrap-5");
+    $.fn.select2.defaults.set("placeholder", "Select");
+
+    function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById('preview');
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
