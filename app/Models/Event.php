@@ -23,6 +23,7 @@ class Event extends Model
         'upazila_id',
         'union_id',
         'description',
+        'image_path',
         'status',
     ];
 

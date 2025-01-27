@@ -101,7 +101,7 @@
                                                 <span class="input-group-text">Upload</span>
                                             </div>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="image_path" onchange="previewImage(event)">
+                                                <input type="file" class="custom-file-input" name="image_path" id="image_path" onchange="previewImage(event)">
                                                 <label class="custom-file-label" for="image_path">Choose file</label>
                                             </div>
                                         </div>
@@ -155,16 +155,27 @@
                 allowClear: true,
             });
 
-            $(document).on('submit', '#event-form', (event) => {
-                event.preventDefault();
-                if (titleValidation.val() == null) {
+            $(document).on('submit', '#event-form', function (e) {
+                e.preventDefault();
+                let isValid = true;
+
+                $('.title-validation, .date-validation, .division-validation').text('');
+
+                if ($('#title').val().trim() === '') {
                     $('.title-validation').text('Title is required');
+                    isValid = false;
                 }
-                if (dateValidation.val() == null) {
+                if ($('#date').val().trim() === '') {
                     $('.date-validation').text('Date is required');
+                    isValid = false;
                 }
-                if (divisionValidation.val() == null) {
+                if ($('#division_id').val().trim() === '') {
                     $('.division-validation').text('Division is required');
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    this.submit();
                 }
             });
 
@@ -198,7 +209,6 @@
                 }
             })
         }
-
         function fetchUpazilas() {
             let districtId = district.val();
             if (!districtId) {
@@ -218,7 +228,6 @@
                 }
             })
         }
-
         function fetchUnions() {
             let upazilaId = upazila.val();
             if (!upazilaId) {
