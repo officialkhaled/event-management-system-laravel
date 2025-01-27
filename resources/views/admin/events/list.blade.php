@@ -14,37 +14,42 @@
                                 &nbsp;<i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Add&nbsp;
                             </a>
                         </div>
-                        <div class="single-table datatable-primary">
-                            <table id="dataTable2" class="table text-center">
-                                <thead class="text-capitalize">
-                                <tr>
-                                    <th width="5%">SL</th>
-                                    <th>Name</th>
-                                    <th>Position</th>
-                                    <th>Office</th>
-                                    <th>Age</th>
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Airi Satou</td>
-                                    <td>Accountant</td>
-                                    <td>Tokyo</td>
-                                    <td>2008/11/28</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Angelica Ramos</td>
-                                    <td>Chief Executive Officer (CEO)</td>
-                                    <td>London</td>
-                                    <td>2009/10/09</td>
-                                    <td></td>
-                                </tr>
-                                </tbody>
-                            </table>
+                        <div class="single-table">
+                            <div class="table-responsive">
+                                <table class="table text-center">
+                                    <thead class="text-uppercase bg-primary">
+                                    <tr class="text-white">
+                                        <th>SL</th>
+                                        <th>Title</th>
+                                        <th>Date</th>
+                                        <th>Schedule</th>
+                                        <th>Location</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @forelse($events as $event)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $event->title }}</td>
+                                            <td>{{ dateFormatter($event->date) }}</td>
+                                            <td>{{ dateFormatter($event->from_time, 'h:i A') . ' - ' . dateFormatter($event->to_time, 'h:i A') }}</td>
+                                            <td>{{ $event->district?->name . ', ' . $event->division?->name  }}</td>
+                                            <td>{{ $event->status === 1 ? 'Active' : 'Inactive' }}</td>
+                                            <td class="d-flex" style="justify-content: center; gap: 6px;">
+                                                <a href="{{ route('admin.events.edit', $event->id) }}" class="btn btn-success"><i class="fa-solid fa-pen-to-square" style="opacity: 75%;"></i></a>
+                                                <a href="{{ route('admin.events.destroy', $event->id) }}" class="btn btn-danger"><i class="fa-solid fa-trash" style="opacity: 75%;"></i></a>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="7" class="text-danger">No Data Found!</td>
+                                        </tr>
+                                    @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
