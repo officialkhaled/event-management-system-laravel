@@ -1,5 +1,5 @@
 @extends('common.layout')
-@section('title', 'Add Events')
+@section('title', 'Edit Event')
 {{--@section('breadcrumb', 'Events')--}}
 @section('content')
 
@@ -22,40 +22,41 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
-                            <h4 class="header-title">Add Events</h4>
+                            <h4 class="header-title">Edit Event</h4>
                             <a href="{{ route('admin.events.index') }}" class="btn btn-info waves-effect bg-gradient mb-3">
                                 &nbsp;<i class="fa-solid fa-angles-left"></i>&nbsp;&nbsp;Back&nbsp;
                             </a>
                         </div>
 
-                        <form action="{{ route('admin.events.store') }}" method="post" id="event-form" enctype="multipart/form-data">
+                        <form action="{{ route('admin.events.update', $event->id) }}" method="POST" id="event-form" enctype="multipart/form-data">
                             @csrf
+                            @method('PATCH')
 
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="title">Title <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter title">
+                                        <input type="text" class="form-control" id="title" name="title" value="{{ $event->title }}" placeholder="Enter title">
                                         <span class="text-danger title-validation"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="title">Date <span class="text-danger">*</span></label>
-                                        <input type="date" class="form-control" id="date" name="date" placeholder="Enter date" value="{{ date('Y-m-d') }}">
+                                        <input type="date" class="form-control" id="date" name="date" placeholder="Enter date" value="{{ dateFormatter($event->date, 'Y-m-d') }}">
                                         <span class="text-danger date-validation"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="from_time">From Time</label>
-                                        <input type="time" class="form-control" id="from_time" name="from_time"/>
+                                        <input type="time" class="form-control" id="from_time" name="from_time" value="{{ $event->from_time }}"/>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="to_time">To Time</label>
-                                        <input type="time" class="form-control" id="to_time" name="to_time"/>
+                                        <input type="time" class="form-control" id="to_time" name="to_time" value="{{ $event->to_time }}"/>
                                     </div>
                                 </div>
                             </div>
@@ -67,7 +68,9 @@
                                         <select name="division_id" id="division_id" class="form-control select2">
                                             <option value="">Select</option>
                                             @foreach($divisions as $division)
-                                                <option value="{{ $division->id }}">{{ $division->name }}</option>
+                                                <option value="{{ $event->division_id ? $event->division_id : $division->id }}" {{ old('name', $division->name) ? 'selected' : '' }}>
+                                                    {{ $division->name }}
+                                                </option>
                                             @endforeach
                                         </select>
                                         <span class="text-danger division-validation"></span>
@@ -103,7 +106,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="description">Description</label>
-                                        <textarea class="form-control" name="description" id="description" rows="1" placeholder="Enter description"></textarea>
+                                        <textarea class="form-control" name="description" id="description" rows="1" placeholder="Enter description">{{ $event->description ?? '' }}</textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -202,10 +205,6 @@
             });
         });
 
-        function refreshPage() {
-            location.reload();
-        }
-
         function fetchDistricts() {
             let divisionId = division.val();
             if (!divisionId) {
@@ -218,7 +217,7 @@
                 success(result) {
                     $.each(result, function (key, value) {
                         district.append(`<option value="${value.id}">${value.text}</option>`);
-                    })
+                    });
                 },
                 error: function (error) {
                     console.log(error);
@@ -238,7 +237,7 @@
                 success(result) {
                     $.each(result, function (key, value) {
                         upazila.append(`<option value="${value.id}">${value.text}</option>`);
-                    })
+                    });
                 },
                 error: function (error) {
                     console.log(error);
@@ -258,7 +257,7 @@
                 success(result) {
                     $.each(result, function (key, value) {
                         union.append(`<option value="${value.id}">${value.text}</option>`);
-                    })
+                    });
                 },
                 error: function (error) {
                     console.log(error);
