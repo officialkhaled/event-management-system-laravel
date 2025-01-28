@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Devfaysal\BangladeshGeocode\Models\Union;
 use Devfaysal\BangladeshGeocode\Models\Upazila;
 use Devfaysal\BangladeshGeocode\Models\District;
@@ -77,20 +78,40 @@ class EventController extends Controller
     public function edit(Event $event)
     {
         $divisions = Division::all();
+        $districts = District::all();
+        $upazilas = Upazila::all();
+        $unions = Union::all();
 
         return view('admin.events.edit', [
-            'divisions' => $divisions,
             'event' => $event,
+            'divisions' => $divisions,
+            'districts' => $districts,
+            'upazilas' => $upazilas,
+            'unions' => $unions,
         ]);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, Event $event)
     {
-        return view('admin.events.create');
+        $event->update($request->all());
+
+        if ($request->hasFile('image_path')) {
+            if ($event->image_path && Storage::exists('public/' . $event->image_path)) {
+                Storage::delete('public/' . $event->image_path);
+            }
+
+            $imageName = $request->file('image_path')->store('images', 'public');
+            $validated['image_path'] = $imageName;
+        }
+
+        $event->save();
+
+        return redirect()->route('admin.events.index')->with('success', 'Event Updated Successfully!');
     }
 
-    public function destroy(Request $request)
+    public function destroy(Event $event)
     {
+        $event->delete();
         return view('admin.events.list');
     }
 }

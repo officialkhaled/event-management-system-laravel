@@ -35,7 +35,7 @@
                                             <td>{{ $event->title }}</td>
                                             <td>{{ dateFormatter($event->date) }}</td>
                                             <td>{{ dateFormatter($event->from_time, 'h:i A') . ' - ' . dateFormatter($event->to_time, 'h:i A') }}</td>
-                                            <td>{{ $event->district?->name . ', ' . $event->division?->name  }}</td>
+                                            <td>{{ ($event->district?->name) . ($event->district?->name ? ', ' : '') . $event->division?->name  }}</td>
                                             <td>{{ $event->status === 1 ? 'Active' : 'Inactive' }}</td>
                                             <td class="d-flex" style="justify-content: center; gap: 6px;">
                                                 <a href="{{ route('admin.events.edit', $event->id) }}" class="btn btn-success"><i class="fa-solid fa-pen-to-square" style="opacity: 75%;"></i></a>

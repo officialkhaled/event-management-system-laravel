@@ -10,7 +10,7 @@
                 <ul class="metismenu" id="menu">
                     <li class="{{ request()->is('admin/dashboard') ? 'active' : '' }}">
                         <a href="{{ (currentUser()->role == 1) ? route('admin.admin-dashboard') : route('attendee.attendee-dashboard') }}">
-                            <i class="ti-dashboard"> </i> <span>Dashboard</span>
+                            <i class="fa-solid fa-house-chimney"></i> <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="{{ request()->is('admin/events*') ? 'active' : '' }}">
@@ -21,7 +21,7 @@
 
                     <li class="{{ request()->is('admin/attendees*') ? 'active' : '' }}">
                         <a href="{{ route('admin.attendees.index') }}">
-                            <i class="fa fa-table"> </i> <span>Attendees</span>
+                            <i class="fa-solid fa-user-group"></i> <span>Attendees</span>
                         </a>
                     </li>
 

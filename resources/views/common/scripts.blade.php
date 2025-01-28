@@ -37,6 +37,10 @@
     $.fn.select2.defaults.set("theme", "bootstrap-5");
     $.fn.select2.defaults.set("placeholder", "Select");
 
+    function refreshPage() {
+        location.reload();
+    }
+
     function previewImage(event) {
         const input = event.target;
         const preview = document.getElementById('image_preview');
