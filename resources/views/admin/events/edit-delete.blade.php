@@ -1,6 +1,6 @@
 @extends('common.layout')
-@section('title', 'Add Attendees')
-{{--@section('breadcrumb', 'Attendees')--}}
+@section('title', 'Edit Event')
+{{--@section('breadcrumb', 'Events')--}}
 @section('content')
 
     <div class="main-content-inner">
@@ -23,40 +23,41 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
-                            <h4 class="header-title">Add Attendees</h4>
-                            <a href="{{ route('admin.attendees.index') }}" class="btn btn-info waves-effect bg-gradient mb-3">
+                            <h4 class="header-title">Edit Event</h4>
+                            <a href="{{ route('admin.events.index') }}" class="btn btn-info waves-effect bg-gradient mb-3">
                                 &nbsp;<i class="fa-solid fa-angles-left"></i>&nbsp;&nbsp;Back&nbsp;
                             </a>
                         </div>
 
-                        <form action="{{ route('admin.attendees.store') }}" method="post" id="attendee-form" enctype="multipart/form-data">
+                        <form action="{{ route('admin.events.update', $event->id) }}" method="POST" id="event-form" enctype="multipart/form-data">
                             @csrf
+                            @method('PATCH')
 
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="title">Title <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter title">
+                                        <input type="text" class="form-control" id="title" name="title" value="{{ $event->title }}" placeholder="Enter title">
                                         <span class="text-danger title-validation"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="title">Date <span class="text-danger">*</span></label>
-                                        <input type="date" class="form-control" id="date" name="date" placeholder="Enter date" value="{{ date('Y-m-d') }}">
+                                        <input type="date" class="form-control" id="date" name="date" placeholder="Enter date" value="{{ dateFormatter($event->date, 'Y-m-d') }}">
                                         <span class="text-danger date-validation"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="from_time">From Time</label>
-                                        <input type="time" class="form-control" id="from_time" name="from_time"/>
+                                        <input type="time" class="form-control" id="from_time" name="from_time" value="{{ $event->from_time }}"/>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="to_time">To Time</label>
-                                        <input type="time" class="form-control" id="to_time" name="to_time"/>
+                                        <input type="time" class="form-control" id="to_time" name="to_time" value="{{ $event->to_time }}"/>
                                     </div>
                                 </div>
                             </div>
@@ -68,7 +69,9 @@
                                         <select name="division_id" id="division_id" class="form-control select2">
                                             <option value="">Select</option>
                                             @foreach($divisions as $division)
-                                                <option value="{{ $division->id }}">{{ $division->name }}</option>
+                                                <option value="{{ $division->id }}" {{ old('division_id', $event->division_id) == $division->id ? 'selected' : '' }}>
+                                                    {{ $division->name }}
+                                                </option>
                                             @endforeach
                                         </select>
                                         <span class="text-danger division-validation"></span>
@@ -104,7 +107,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="description">Description</label>
-                                        <textarea class="form-control" name="description" id="description" rows="1" placeholder="Enter description"></textarea>
+                                        <textarea class="form-control" name="description" id="description" rows="1" placeholder="Enter description">{{ $event->description ?? '' }}</textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -128,7 +131,7 @@
                                     <div class="form-group" data-container="body" data-toggle="popover" title="Event Thumbnail" data-placement="top"
                                          data-content="">
                                         <img style="width: 780px; aspect-ratio: 16/9; object-fit: contain; border-radius: 6px; margin-top: 30px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);"
-                                             src="{{ asset('assets/images/no_image.jpg') }}" id="image_preview" class="img-fluid" alt="Uploaded Image"/>
+                                             src="{{ $event->image_path ? asset('storage/' . $event->image_path) : asset('assets/images/no_image.jpg') }}" id="image_preview" class="img-fluid" alt="Uploaded Image"/>
                                     </div>
                                 </div>
                             </div>
@@ -136,11 +139,11 @@
                             <div class="row mt-2">
                                 <div class="col-md-12 d-flex justify-content-center" style="gap: 8px;">
                                     <button type="submit" class="btn btn-success waves-effect waves-light">
-                                        &nbsp;<i class="fa-solid fa-save"></i>&nbsp;&nbsp;Submit&nbsp;
+                                        &nbsp;<i class="fa-solid fa-save"></i>&nbsp;&nbsp;Update&nbsp;
                                     </button>
-                                    <a href="{{ route('admin.attendees.create') }}" class="btn btn-warning text-white waves-effect waves-light">
+                                    <button type="button" onclick="refreshPage()" class="btn btn-warning text-white waves-effect waves-light">
                                         &nbsp;<i class="fa-solid fa-recycle"></i>&nbsp;&nbsp;Refresh&nbsp;
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                         </form>
@@ -168,7 +171,7 @@
                 allowClear: true,
             });
 
-            $(document).on('submit', '#attendee-form', function (e) {
+            $(document).on('submit', '#event-form', function (e) {
                 e.preventDefault();
                 let isValid = true;
                 $('.title-validation, .date-validation, .division-validation').text('');
@@ -189,16 +192,16 @@
                 if (isValid) {
                     this.submit();
                 }
-            });
 
-            $(document).on('change', '#division_id', () => {
-                fetchDistricts();
-            });
-            $(document).on('change', '#district_id', () => {
-                fetchUpazilas();
-            });
-            $(document).on('change', '#upazila_id', () => {
-                fetchUnions();
+                $(document).on('change', '#division_id', () => {
+                    fetchDistricts();
+                });
+                $(document).on('change', '#district_id', () => {
+                    fetchUpazilas();
+                });
+                $(document).on('change', '#upazila_id', () => {
+                    fetchUnions();
+                });
             });
         });
 
@@ -214,13 +217,14 @@
                 success(result) {
                     $.each(result, function (key, value) {
                         district.append(`<option value="${value.id}">${value.text}</option>`);
-                    })
+                    });
                 },
                 error: function (error) {
                     console.log(error);
                 }
             })
         }
+
         function fetchUpazilas() {
             let districtId = district.val();
             if (!districtId) {
@@ -233,13 +237,14 @@
                 success(result) {
                     $.each(result, function (key, value) {
                         upazila.append(`<option value="${value.id}">${value.text}</option>`);
-                    })
+                    });
                 },
                 error: function (error) {
                     console.log(error);
                 }
             })
         }
+
         function fetchUnions() {
             let upazilaId = upazila.val();
             if (!upazilaId) {
@@ -252,7 +257,7 @@
                 success(result) {
                     $.each(result, function (key, value) {
                         union.append(`<option value="${value.id}">${value.text}</option>`);
-                    })
+                    });
                 },
                 error: function (error) {
                     console.log(error);

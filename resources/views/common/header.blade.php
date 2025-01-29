@@ -24,11 +24,12 @@
                 <img class="avatar user-thumb" src="{{ asset('assets/images/author/avatar.png') }}" alt="avatar">
                 <h4 class="user-name dropdown-toggle" data-toggle="dropdown">{{ userName() }}<i class="fa fa-angle-down"></i></h4>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="{{ (currentUser()->role == 1) ? route('admin.profile.edit', userId()) : route('attendee.profile.edit', userId()) }}">Profile</a>
+                    <a class="dropdown-item" href="{{ (currentUser()->role == 1) ? route('admin.profile.edit', userId()) : route('attendee.profile.edit', userId()) }}">
+                        <i class="fa-solid fa-user-pen" style="opacity: 75%;"></i>&nbsp;&nbsp;Profile
+                    </a>
                     <form method="POST" action="{{ route('logout') }}">
-                        @csrf
                         <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">
-                            Log Out
+                            <i class="fa-solid fa-right-from-bracket" style="opacity: 75%;"></i>&nbsp;&nbsp;Log Out
                         </a>
                     </form>
                 </div>

@@ -221,6 +221,7 @@
                 }
             })
         }
+
         function fetchUpazilas() {
             let districtId = district.val();
             if (!districtId) {
@@ -240,6 +241,7 @@
                 }
             })
         }
+
         function fetchUnions() {
             let upazilaId = upazila.val();
             if (!upazilaId) {

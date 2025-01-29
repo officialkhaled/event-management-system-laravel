@@ -11,7 +11,7 @@
                         <div class="d-flex justify-content-between">
                             <h4 class="header-title">Events List</h4>
                             <a href="{{ route('admin.events.create') }}" class="btn btn-info waves-effect bg-gradient mb-3">
-                                &nbsp;<i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Add&nbsp;
+                                &nbsp;<i class="fa-solid fa-plus" style="opacity: 75%;"></i>&nbsp;&nbsp;Add&nbsp;
                             </a>
                         </div>
                         <div class="single-table">
@@ -19,7 +19,7 @@
                                 <table class="table text-center">
                                     <thead class="text-uppercase bg-primary">
                                     <tr class="text-white">
-                                        <th>SL</th>
+                                        <th width="5%">SL</th>
                                         <th>Title</th>
                                         <th>Date</th>
                                         <th>Schedule</th>
@@ -38,8 +38,17 @@
                                             <td>{{ ($event->district?->name) . ($event->district?->name ? ', ' : '') . $event->division?->name  }}</td>
                                             <td>{{ $event->status === 1 ? 'Active' : 'Inactive' }}</td>
                                             <td class="d-flex" style="justify-content: center; gap: 6px;">
-                                                <a href="{{ route('admin.events.edit', $event->id) }}" class="btn btn-success"><i class="fa-solid fa-pen-to-square" style="opacity: 75%;"></i></a>
-                                                <a href="{{ route('admin.events.destroy', $event->id) }}" class="btn btn-danger"><i class="fa-solid fa-trash" style="opacity: 75%;"></i></a>
+                                                <a href="{{ route('admin.events.edit', $event->id) }}" class="btn btn-success waves-effect waves-light"
+                                                   data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                                    <i class="fa-solid fa-pen-to-square" style="opacity: 75%;"></i>
+                                                </a>
+                                                <form action="{{ route('admin.events.destroy', $event->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="btn btn-danger waves-effect waves-light" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                                        <i class="fa-solid fa-trash" style="opacity: 75%;"></i>
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
                                     @empty

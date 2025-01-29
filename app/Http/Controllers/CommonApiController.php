@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 use Devfaysal\BangladeshGeocode\Models\Union;
 use Devfaysal\BangladeshGeocode\Models\Upazila;
 use Devfaysal\BangladeshGeocode\Models\District;
@@ -14,7 +15,9 @@ class CommonApiController extends Controller
         $divisionId = $request->get('division_id');
 
         $districts = District::query()
-            ->where('division_id', $divisionId)
+            ->when($divisionId, function (Builder $query, $divisionId) {
+                return $query->where('division_id', $divisionId);
+            })
             ->get()
             ->map(function ($district) {
                 return [
@@ -32,7 +35,9 @@ class CommonApiController extends Controller
         $districtId = $request->get('district_id');
 
         $upazilas = Upazila::query()
-            ->where('district_id', $districtId)
+            ->when($districtId, function (Builder $query, $districtId) {
+                return $query->where('district_id', $districtId);
+            })
             ->get()
             ->map(function ($upazila) {
                 return [
@@ -50,7 +55,9 @@ class CommonApiController extends Controller
         $upazilaId = $request->get('upazila_id');
 
         $unions = Union::query()
-            ->where('upazila_id', $upazilaId)
+            ->when($upazilaId, function (Builder $query, $upazilaId) {
+                return $query->where('upazila_id', $upazilaId);
+            })
             ->get()
             ->map(function ($union) {
                 return [

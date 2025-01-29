@@ -1,4 +1,4 @@
-<link rel="icon" type="image/png" href="{{ asset('assets/images/icon/favicon.ico') }}">
+<link rel="icon" type="image/png" href="{{ asset('favicon.ico') }}">
 
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/font-awesome.min.css') }}">
