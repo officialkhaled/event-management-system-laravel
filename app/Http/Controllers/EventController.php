@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Devfaysal\BangladeshGeocode\Models\Union;
-use Devfaysal\BangladeshGeocode\Models\Upazila;
-use Devfaysal\BangladeshGeocode\Models\District;
 use Devfaysal\BangladeshGeocode\Models\Division;
 
 class EventController extends Controller
@@ -78,16 +75,10 @@ class EventController extends Controller
     public function edit(Event $event)
     {
         $divisions = Division::all();
-        $districts = District::all();
-        $upazilas = Upazila::all();
-        $unions = Union::all();
 
         return view('admin.events.edit', [
             'event' => $event,
             'divisions' => $divisions,
-            'districts' => $districts,
-            'upazilas' => $upazilas,
-            'unions' => $unions,
         ]);
     }
 
@@ -100,8 +91,13 @@ class EventController extends Controller
                 Storage::delete('public/' . $event->image_path);
             }
 
-            $imageName = $request->file('image_path')->store('images', 'public');
-            $validated['image_path'] = $imageName;
+            $image = $request->file('image_path');
+            $imageName = "images/" . time() . '.' . $image->getClientOriginalExtension();
+            $image->move(storage_path('app/public/images'), $imageName);
+
+            $event->update([
+                'image_path' => $imageName,
+            ]);
         }
 
         $event->save();
@@ -112,6 +108,6 @@ class EventController extends Controller
     public function destroy(Event $event)
     {
         $event->delete();
-        return view('admin.events.list');
+        return redirect()->route('admin.events.index')->with('success', 'Event Deleted Successfully.');
     }
 }
