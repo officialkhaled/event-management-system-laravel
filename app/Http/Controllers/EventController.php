@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\Response;
 use Devfaysal\BangladeshGeocode\Models\Division;
 
 class EventController extends Controller
@@ -74,12 +75,19 @@ class EventController extends Controller
 
     public function edit(Event $event)
     {
-        $divisions = Division::all();
+        return response()->json([
+            'success' => true,
+            'message' => 'Fetch Event Data Successfully',
+            'data' => $event,
+            'status' => Response::HTTP_OK,
+        ], Response::HTTP_OK);
 
-        return view('admin.events.edit', [
-            'event' => $event,
-            'divisions' => $divisions,
-        ]);
+//        $divisions = Division::all();
+
+//        return view('admin.events.edit', [
+//            'event' => $event,
+//            'divisions' => $divisions,
+//        ]);
     }
 
     public function update(Request $request, Event $event)
