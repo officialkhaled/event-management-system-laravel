@@ -3,7 +3,17 @@
 @section('content')
 
     <div class="main-content-inner">
-        <div class="row">
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>{{ Carbon\Carbon::greetings() }}{{ userName() }}!</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-1">
             <div class="col-lg-12">
                 <div class="row">
                     <div class="col-md-6 mt-3 mb-3">
