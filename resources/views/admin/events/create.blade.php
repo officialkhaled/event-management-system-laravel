@@ -22,40 +22,43 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
-                            <h4 class="header-title">Add Events</h4>
+                            <h4 class="header-title">{{ isset($event) ? 'Edit' : 'Add' }} Events</h4>
                             <a href="{{ route('admin.events.index') }}" class="btn btn-info waves-effect bg-gradient mb-3">
                                 &nbsp;<i class="fa-solid fa-angles-left"></i>&nbsp;&nbsp;Back&nbsp;
                             </a>
                         </div>
 
-                        <form action="{{ route('admin.events.store') }}" method="post" id="event-form" enctype="multipart/form-data">
+                        <form action="{{ isset($event) ? route('admin.events.update', $event->id) : route('admin.events.store') }}" method="POST" id="event-form" enctype="multipart/form-data">
                             @csrf
+                            @if(isset($event))
+                                @method('PUT')
+                            @endif
 
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="title">Title <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter title">
+                                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter title" value="{{ $event->title ?? '' }}">
                                         <span class="text-danger title-validation"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="title">Date <span class="text-danger">*</span></label>
-                                        <input type="date" class="form-control" id="date" name="date" placeholder="Enter date" value="{{ date('Y-m-d') }}">
+                                        <input type="date" class="form-control" id="date" name="date" placeholder="Enter date" value="{{ $event->date ? date($event->date, 'Y-m-d') : date('Y-m-d') }}">
                                         <span class="text-danger date-validation"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="from_time">From Time</label>
-                                        <input type="time" class="form-control" id="from_time" name="from_time"/>
+                                        <input type="time" class="form-control" id="from_time" name="from_time" value="{{ $event->from_time }}"/>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="to_time">To Time</label>
-                                        <input type="time" class="form-control" id="to_time" name="to_time"/>
+                                        <input type="time" class="form-control" id="to_time" name="to_time" value="{{ $event->to_time }}"/>
                                     </div>
                                 </div>
                             </div>
@@ -135,7 +138,7 @@
                             <div class="row mt-2">
                                 <div class="col-md-12 d-flex justify-content-center" style="gap: 8px;">
                                     <button type="submit" class="btn btn-success waves-effect waves-light">
-                                        &nbsp;<i class="fa-solid fa-save"></i>&nbsp;&nbsp;Submit&nbsp;
+                                        &nbsp;<i class="fa-solid fa-save"></i>&nbsp;&nbsp;{{ isset($event) ? 'Update' : 'Submit' }}&nbsp;
                                     </button>
                                     <a href="{{ route('admin.events.create') }}" class="btn btn-warning text-white waves-effect waves-light">
                                         &nbsp;<i class="fa-solid fa-recycle"></i>&nbsp;&nbsp;Refresh&nbsp;
@@ -152,8 +155,8 @@
 @endsection
 
 @section('scripts')
-
     <script>
+        var id = null;
         const division = $('#division_id');
         const district = $('#district_id');
         const upazila = $('#upazila_id');
@@ -163,13 +166,22 @@
         const dateValidation = $('.date-validation');
         const divisionValidation = $('.division-validation');
 
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('id')) {
+                document.getElementById('event-form').setAttribute('method', 'POST');
+            }
+            getEditData();
+        });
+
         $(document).ready(function () {
             $('.select2').select2({
                 allowClear: true,
             });
 
-            $(document).on('submit', '#event-form', function (e) {
-                e.preventDefault();
+            $(document).on('submit', '#attendee-form', function (event) {
+                event.preventDefault();
+
                 let isValid = true;
                 $('.title-validation, .date-validation, .division-validation').text('');
 
@@ -187,7 +199,9 @@
                 }
 
                 if (isValid) {
-                    this.submit();
+                    let formData = $(this).serializeArray();
+                    // this.submit();
+                    submitForm(formData);
                 }
             });
 
@@ -221,7 +235,6 @@
                 }
             })
         }
-
         function fetchUpazilas() {
             let districtId = district.val();
             if (!districtId) {
@@ -241,7 +254,6 @@
                 }
             })
         }
-
         function fetchUnions() {
             let upazilaId = upazila.val();
             if (!upazilaId) {
@@ -261,6 +273,81 @@
                 }
             })
         }
-    </script>
 
+        function submitForm(formData) {
+            if (this.id) {
+                updateForm(formData);
+                return;
+            }
+
+            $.ajax({
+                url: "{{ route('admin.events.store' }}",
+                type: "POST",
+                data: formData,
+                beforeSend() {
+                    // $('html,body').css('cursor', 'wait');
+                    // $("html").css({'background-color': 'black', 'opacity': '0.5'});
+                    // $(".loader").show();
+                },
+                complete() {
+                    // $('html,body').css('cursor', 'default');
+                    // $("html").css({'background-color': '', 'opacity': ''});
+                    // $(".loader").hide();
+                },
+                success(data) {
+                    // this.submit();
+                },
+                error(errors) {
+                    // toastr.error("Something Went Wrong");
+                }
+            })
+        }
+
+        function updateForm() {
+            $.ajax({
+                url: "{{ route('admin.events.update' }}",
+                type: "POST",
+                data: formData,
+                success(data) {
+                    alert("Form Submitted Successfully");
+                    // this.submit();
+                },
+                error(errors) {
+                    // toastr.error("Something Went Wrong");
+                    alert("Something Went Wrong");
+                }
+            })
+        }
+
+        async function getEditData() {
+            // const urlParams = new URLSearchParams(window.location.search);
+            // const id = urlParams.get('id');
+
+            if (!id) {
+                return;
+            }
+            try {
+                const {
+                    data: {data},
+                    status
+                } = await axios.get(route('admin.events.edit', id));
+
+                if (status === 200) {
+                    console.log({data});
+
+                    this.form = {
+                        name: data.name,
+                        date: data.date,
+                        location: data.location,
+                        department_id: data.department_id,
+                        section_id: data.section_id,
+                        designation_id: data.designation_id,
+                        image_path: data.image_path,
+                    };
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    </script>
 @endsection

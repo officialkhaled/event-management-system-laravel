@@ -36,9 +36,9 @@ Route::middleware(['auth', 'role:1'])->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/create', 'create')->name('create');
                 Route::post('/', 'store')->name('store');
-                Route::get('/{event}/edit', 'edit')->name('edit');
-                Route::patch('/{event}/', 'update')->name('update');
-                Route::delete('/{event}/', 'destroy')->name('destroy');
+                Route::get('{event}/edit', 'edit')->name('edit');
+                Route::put('{event}', 'update')->name('update');
+                Route::delete('{event}', 'destroy')->name('destroy');
             });
         });
 
@@ -47,16 +47,16 @@ Route::middleware(['auth', 'role:1'])->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/create', 'create')->name('create');
                 Route::post('/', 'store')->name('store');
-                Route::get('/{event}/edit', 'edit')->name('edit');
-                Route::patch('/{event}/', 'update')->name('update');
-                Route::delete('/{event}/', 'destroy')->name('destroy');
+                Route::get('{event}/edit', 'edit')->name('edit');
+                Route::put('{event}', 'update')->name('update');
+                Route::delete('{event}', 'destroy')->name('destroy');
             });
         });
 
         Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {
             Route::controller(ProfileController::class)->group(function () {
-                Route::get('/{admin}/edit', 'edit')->name('edit');
-                Route::patch('/{admin}', 'update')->name('update');
+                Route::get('{admin}/edit', 'edit')->name('edit');
+                Route::patch('{admin}', 'update')->name('update');
             });
         });
     });
@@ -77,8 +77,8 @@ Route::middleware(['auth', 'role:2'])->group(function () {
 
         Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {
             Route::controller(ProfileController::class)->group(function () {
-                Route::get('/{attendee}/edit', 'edit')->name('edit');
-                Route::patch('/{attendee}', 'update')->name('update');
+                Route::get('{attendee}/edit', 'edit')->name('edit');
+                Route::patch('{attendee}', 'update')->name('update');
             });
         });
     });
