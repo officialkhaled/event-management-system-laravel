@@ -284,16 +284,6 @@
                 url: "{{ route('admin.events.store' }}",
                 type: "POST",
                 data: formData,
-                beforeSend() {
-                    // $('html,body').css('cursor', 'wait');
-                    // $("html").css({'background-color': 'black', 'opacity': '0.5'});
-                    // $(".loader").show();
-                },
-                complete() {
-                    // $('html,body').css('cursor', 'default');
-                    // $("html").css({'background-color': '', 'opacity': ''});
-                    // $(".loader").hide();
-                },
                 success(data) {
                     // this.submit();
                 },
